@@ -5,17 +5,59 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Task;
+use App\Form\TaskType;
+use App\Repository\TaskRepository;
 
 class TaskController extends AbstractController
 {
-    #[Route('/tasks', name: 'task_list')]
-    public function list(): JsonResponse
+    #[Route('tasks/list', name: 'task_list', methods: ['GET'])]
+    public function list(TaskRepository $taskRepository)
     {
-        $tasks = Task::all();
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/TaskController.php',
-            'tasks' => $tasks
+        $tasks = $taskRepository->findAll();
+        return $this->render('task/list.html.twig', ['tasks' => $tasks]);
+    }
+
+    #[Route('/tasks/create', name: 'task_create', methods:['GET', 'POST'])]
+    public function create(Request $request, EntityManagerInterface $em)
+    {
+        $task = new Task();
+        $form = $this->createForm(TaskType::class, $task);
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+
+            $em->persist($task);
+            $em->flush();
+
+            $this->addFlash('success', 'La tâche a été bien été ajoutée.');
+
+            return $this->redirectToRoute('task_list');
+        }
+
+        return $this->render('task/create.html.twig', ['form' => $form->createView()]);
+    }
+
+    #[Route('tasks/{id}/edit', name: 'task_edit', methods: ['PUT'])]
+    public function edit(Task $task, Request $request, EntityManagerInterface $em)
+    {
+        $form = $this->createForm(TaskType::class, $task);
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em->flush();
+
+            $this->addFlash('success', 'La tâche a bien été modifiée.');
+
+            return $this->redirectToRoute('task_list');
+        }
+
+        return $this->render('task/edit.html.twig', [
+            'form' => $form->createView(),
+            'task' => $task,
         ]);
     }
 }

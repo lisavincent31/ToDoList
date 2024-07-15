@@ -41,7 +41,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('tasks/{id}/edit', name: 'task_edit', methods: ['PUT'])]
-    public function edit(Task $task, Request $request, EntityManagerInterface $em)
+    public function editAction(Task $task, Request $request, EntityManagerInterface $em)
     {
         $form = $this->createForm(TaskType::class, $task);
 
@@ -59,5 +59,27 @@ class TaskController extends AbstractController
             'form' => $form->createView(),
             'task' => $task,
         ]);
+    }
+
+    #[Route('/tasks/{id}/toggle', name: 'task_toggle', methods: ['POST'])]
+    public function toggleTask(Task $task, EntityManagerInterface $em)
+    {
+        $task->toggle(!$task->isDone());
+        $em->flush();
+
+        $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+
+        return $this->redirectToRoute('task_list');
+    }
+
+    #[Route('/tasks/{id}/delete', name: 'task_delete', methods: ['DELETE'])]
+    public function deleteTask(Task $task, EntityManagerInterface $em)
+    {
+        $em->remove($task);
+        $em->flush();
+
+        $this->addFlash('success', 'La tâche a bien été supprimée.');
+
+        return $this->redirectToRoute('task_list');
     }
 }

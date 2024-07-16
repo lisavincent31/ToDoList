@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\SecurityBundle\Security;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Task;
 use App\Form\TaskType;
@@ -12,6 +13,13 @@ use App\Repository\TaskRepository;
 
 class TaskController extends AbstractController
 {
+    private Security $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     #[Route('tasks/list', name: 'task_list', methods: ['GET'])]
     public function list(TaskRepository $taskRepository)
     {
@@ -27,8 +35,11 @@ class TaskController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
+            $task->setAuthor($this->security->getUser());
+            $task->setDone(false);
+            $task->setCreatedAt(new \DateTime());
             $em->persist($task);
             $em->flush();
 
@@ -40,14 +51,14 @@ class TaskController extends AbstractController
         return $this->render('task/create.html.twig', ['form' => $form->createView()]);
     }
 
-    #[Route('tasks/{id}/edit', name: 'task_edit', methods: ['PUT'])]
+    #[Route('tasks/{id}/edit', name: 'task_edit', methods:['GET', 'POST'])]
     public function editAction(Task $task, Request $request, EntityManagerInterface $em)
     {
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
 
             $this->addFlash('success', 'La tâche a bien été modifiée.');

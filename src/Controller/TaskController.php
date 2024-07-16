@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Task;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
+use App\Repository\UserRepository;
 
 class TaskController extends AbstractController
 {
@@ -28,7 +29,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/create', name: 'task_create', methods:['GET', 'POST'])]
-    public function create(Request $request, EntityManagerInterface $em)
+    public function create(Request $request, EntityManagerInterface $em, UserRepository $userRepository)
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
@@ -37,7 +38,7 @@ class TaskController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $task->setAuthor($this->security->getUser());
+            $task->setAuthor($this->security->getUser() ?? $userRepository->findOneByUsername("Anonymous"));
             $task->setDone(false);
             $task->setCreatedAt(new \DateTime());
             $em->persist($task);

@@ -122,6 +122,11 @@ class Task
         return $this;
     }
 
+    public function toggle($flag)
+    {
+        $this->isDone = $flag;
+    }
+
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;

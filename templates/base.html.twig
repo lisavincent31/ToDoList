@@ -39,6 +39,7 @@
         <!-- Page Content -->
         <div class="container">
             <div class="row">
+                <a href="{{ path('user_list') }}" class="btn btn-success">Liste des utilisateurs</a>
                 <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
 
                 {% if app.user %}
@@ -46,7 +47,7 @@
                 {% endif %}
 
                 {% if not app.user and 'login' != app.request.attributes.get('_route') %}
-                <a href="{{ path('login') }}" class="btn btn-success">Se connecter</a>
+                <a href="{{ path('login') }}" class="pull-right btn btn-success">Se connecter</a>
                 {% endif %}
             </div>
 

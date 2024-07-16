@@ -11,10 +11,12 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Form\UserType;
+use  Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class UserController extends AbstractController
 {
     #[Route('/users', name: 'user_list', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas les droits suffisants pour créer un livre')]
     public function list(UserRepository $userRepository)
     {
         $users = $userRepository->findAll();

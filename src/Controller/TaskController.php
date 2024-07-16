@@ -54,6 +54,8 @@ class TaskController extends AbstractController
     #[Route('tasks/{id}/edit', name: 'task_edit', methods:['GET', 'POST'])]
     public function editAction(Task $task, Request $request, EntityManagerInterface $em)
     {
+        $user = $this->security->getUser();
+
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
@@ -86,6 +88,14 @@ class TaskController extends AbstractController
     #[Route('/tasks/{id}/delete', name: 'task_delete', methods: ['DELETE'])]
     public function deleteTask(Task $task, EntityManagerInterface $em)
     {
+        if($user->getId() !== $task->getAuthor()->getId()) {
+            $this->addFlash(
+               'error',
+               'Vous ne pouvez pas supprimer cette tâche.'
+            );
+            return $this->redirectToRoute('task_list');
+        }
+
         $em->remove($task);
         $em->flush();
 

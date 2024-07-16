@@ -72,7 +72,7 @@ class TaskController extends AbstractController
         ]);
     }
 
-    #[Route('/tasks/{id}/toggle', name: 'task_toggle', methods: ['POST'])]
+    #[Route('/tasks/{id}/toggle', name: 'task_toggle', methods: ['GET'])]
     public function toggleTask(Task $task, EntityManagerInterface $em)
     {
         $task->toggle(!$task->isDone());

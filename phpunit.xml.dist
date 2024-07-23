@@ -29,6 +29,10 @@
         </include>
     </source>
 
+    <logging>
+        <junit outputFile="junit.xml"/>
+    </logging>
+
     <extensions>
     </extensions>
 </phpunit>

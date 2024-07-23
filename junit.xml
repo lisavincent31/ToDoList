@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="C:\OpenClassrooms\projects\ToDoList\phpunit.xml.dist" tests="17" assertions="23" errors="0" failures="0" skipped="0" time="0.174750">
+    <testsuite name="Project Test Suite" tests="17" assertions="23" errors="0" failures="0" skipped="0" time="0.174750">
+      <testsuite name="App\Tests\Entity\TaskTest" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\TaskTest.php" tests="6" assertions="8" errors="0" failures="0" skipped="0" time="0.123612">
+        <testcase name="testGetId" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\TaskTest.php" line="15" class="App\Tests\Entity\TaskTest" classname="App.Tests.Entity.TaskTest" assertions="1" time="0.113234"/>
+        <testcase name="testSetTitle" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\TaskTest.php" line="25" class="App\Tests\Entity\TaskTest" classname="App.Tests.Entity.TaskTest" assertions="1" time="0.002272"/>
+        <testcase name="testSetContent" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\TaskTest.php" line="36" class="App\Tests\Entity\TaskTest" classname="App.Tests.Entity.TaskTest" assertions="1" time="0.001712"/>
+        <testcase name="testIsDone" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\TaskTest.php" line="47" class="App\Tests\Entity\TaskTest" classname="App.Tests.Entity.TaskTest" assertions="1" time="0.002081"/>
+        <testcase name="testToggle" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\TaskTest.php" line="57" class="App\Tests\Entity\TaskTest" classname="App.Tests.Entity.TaskTest" assertions="3" time="0.002235"/>
+        <testcase name="testCreatedAt" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\TaskTest.php" line="75" class="App\Tests\Entity\TaskTest" classname="App.Tests.Entity.TaskTest" assertions="1" time="0.002079"/>
+      </testsuite>
+      <testsuite name="App\Tests\Entity\UserTest" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\UserTest.php" tests="11" assertions="15" errors="0" failures="0" skipped="0" time="0.051137">
+        <testcase name="testGetId" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\UserTest.php" line="17" class="App\Tests\Entity\UserTest" classname="App.Tests.Entity.UserTest" assertions="1" time="0.029306"/>
+        <testcase name="testSetEmail" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\UserTest.php" line="27" class="App\Tests\Entity\UserTest" classname="App.Tests.Entity.UserTest" assertions="1" time="0.002737"/>
+        <testcase name="testGetUserIdentifier" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\UserTest.php" line="38" class="App\Tests\Entity\UserTest" classname="App.Tests.Entity.UserTest" assertions="1" time="0.002591"/>
+        <testcase name="testGetRoles" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\UserTest.php" line="49" class="App\Tests\Entity\UserTest" classname="App.Tests.Entity.UserTest" assertions="2" time="0.002235"/>
+        <testcase name="testSetRoles" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\UserTest.php" line="62" class="App\Tests\Entity\UserTest" classname="App.Tests.Entity.UserTest" assertions="1" time="0.002029"/>
+        <testcase name="testSetPassword" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\UserTest.php" line="73" class="App\Tests\Entity\UserTest" classname="App.Tests.Entity.UserTest" assertions="1" time="0.001884"/>
+        <testcase name="testEraseCredentials" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\UserTest.php" line="85" class="App\Tests\Entity\UserTest" classname="App.Tests.Entity.UserTest" assertions="1" time="0.001819"/>
+        <testcase name="testSetUsername" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\UserTest.php" line="98" class="App\Tests\Entity\UserTest" classname="App.Tests.Entity.UserTest" assertions="1" time="0.002132"/>
+        <testcase name="testGetTasks" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\UserTest.php" line="109" class="App\Tests\Entity\UserTest" classname="App.Tests.Entity.UserTest" assertions="1" time="0.002695"/>
+        <testcase name="testAddTask" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\UserTest.php" line="119" class="App\Tests\Entity\UserTest" classname="App.Tests.Entity.UserTest" assertions="2" time="0.001883"/>
+        <testcase name="testRemoveTask" file="C:\OpenClassrooms\projects\ToDoList\tests\Entity\UserTest.php" line="133" class="App\Tests\Entity\UserTest" classname="App.Tests.Entity.UserTest" assertions="3" time="0.001825"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

@@ -15,8 +15,15 @@ use  Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class UserController extends AbstractController
 {
+    private $passwordHasher;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    {
+        $this->passwordHasher = $passwordHasher;
+    }
+
     #[Route('/users', name: 'user_list', methods: ['GET'])]
-    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas les droits suffisants pour créer un livre')]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas les droits suffisants pour accéder à cette page.')]
     public function list(UserRepository $userRepository)
     {
         $users = $userRepository->findAll();
@@ -24,7 +31,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/users/create', name: 'user_create', methods: ['GET', 'POST'])]
-    public function create(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher)
+    public function create(Request $request, EntityManagerInterface $em)
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -32,7 +39,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $passwordHasher->hashPassword($user, $user->getPassword());
+            $password = $this->passwordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
 
             $em->persist($user);
@@ -47,14 +54,14 @@ class UserController extends AbstractController
     }
 
     #[Route('/users/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
-    public function edit(User $user, Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher)
+    public function edit(User $user, Request $request, EntityManagerInterface $em)
     {
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $passwordHasher->hashPassword($user, $user->getPassword());
+            $password = $this->passwordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
 
             $em->flush();

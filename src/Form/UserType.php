@@ -58,7 +58,7 @@ class UserType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
                 'label' => 'Rôles'
-            ]);
+            ])
         ;
     }
 

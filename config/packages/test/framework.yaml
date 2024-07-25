@@ -2,3 +2,4 @@ framework:
     test: true
     profiler:
         collect: true
+        only_exceptions: false

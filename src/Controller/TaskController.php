@@ -11,14 +11,17 @@ use App\Entity\Task;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class TaskController extends AbstractController
 {
     private Security $security;
+    private UserPasswordHasherInterface $passwordHasher;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security, UserPasswordHasherInterface $passwordHasher)
     {
         $this->security = $security;
+        $this->passwordHasher = $passwordHasher;
     }
 
     #[Route('tasks/list', name: 'task_list', methods: ['GET'])]
@@ -37,8 +40,11 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if(!$this->security->getUser()) {
+                $anonymous = $userRepository->findOneByUsername("Anonymous");
+            }
 
-            $task->setAuthor($this->security->getUser() ?? $userRepository->findOneByUsername("Anonymous"));
+            $task->setAuthor($this->security->getUser() ?? $anonymous);
             $task->setDone(false);
             $task->setCreatedAt(new \DateTime());
             $em->persist($task);
@@ -53,7 +59,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('tasks/{id}/edit', name: 'task_edit', methods:['GET', 'POST'])]
-    public function editAction(Task $task, Request $request, EntityManagerInterface $em)
+    public function edit(Task $task, Request $request, EntityManagerInterface $em)
     {
         $user = $this->security->getUser();
 
@@ -76,7 +82,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}/toggle', name: 'task_toggle', methods: ['GET'])]
-    public function toggleTask(Task $task, EntityManagerInterface $em)
+    public function toggle(Task $task, EntityManagerInterface $em)
     {
         $task->toggle(!$task->isDone());
         $em->flush();
@@ -87,8 +93,9 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}/delete', name: 'task_delete', methods: ['DELETE'])]
-    public function deleteTask(Task $task, EntityManagerInterface $em)
+    public function delete(Task $task, EntityManagerInterface $em)
     {
+        $user = $this->security->getUser();
         if($user->getId() !== $task->getAuthor()->getId()) {
             $this->addFlash(
                'error',

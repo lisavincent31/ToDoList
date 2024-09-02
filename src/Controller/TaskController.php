@@ -68,6 +68,10 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if($request->get('author')) {
+                $this->addFlash('error', 'Vous ne pouvez pas modifié l\'auteur d\'une tâche.');
+                return $this->redirectToRoute('task_list');
+            }
             $em->flush();
 
             $this->addFlash('success', 'La tâche a bien été modifiée.');
@@ -95,6 +99,7 @@ class TaskController extends AbstractController
     #[Route('/tasks/{id}/delete', name: 'task_delete', methods: ['DELETE'])]
     public function delete(Task $task, EntityManagerInterface $em)
     {
+        // administrateur peut supprimer tache anonyme
         $user = $this->security->getUser();
         if($user->getId() !== $task->getAuthor()->getId()) {
             $this->addFlash(

@@ -19,18 +19,12 @@ class DefaultControllerTest extends WebTestCase
     public function testIndex(): void
     {
         $client = $this->client;
-        $client->enableProfiler();
         $crawler = $client->request('GET', '/');
 
         $this->assertResponseIsSuccessful();
 
-        // Fetch the profiler
-        $profile = $client->getProfile();
-        $collector = $profile->getCollector('twig');
-
-        // Verify if it's the right template used
-        $templates = array_keys($collector->getTemplates());
-        $this->assertContains('default/index.html.twig', $templates);
+        // Verify the title
+        $this->assertSelectorTextContains('h1', "Bienvenue sur Todo List, l'application vous permettant de gérer l'ensemble de vos tâches sans effort !");
     }
 
     public function tearDown(): void

@@ -72,19 +72,11 @@ class TaskControllerTest extends WebTestCase
      */
     public function testTaskListView(): void
     {
-        // Use the profiler to get the template
-        $this->client->enableProfiler();
-
         // Try access to the route
         $crawler = $this->client->request('GET', '/tasks/list');
         $this->assertResponseIsSuccessful();
 
-        $profile = $this->client->getProfile();
-        $collector = $profile->getCollector('twig');
-
-        // Verify if it's the right template
-        $templates = array_keys($collector->getTemplates());
-        $this->assertContains('task/list.html.twig', $templates);
+        $this->assertSelectorTextContains('.btn-info.pull-right', 'Créer une tâche');
     }
 
     /**

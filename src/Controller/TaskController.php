@@ -96,12 +96,19 @@ class TaskController extends AbstractController
         return $this->redirectToRoute('task_list');
     }
 
-    #[Route('/tasks/{id}/delete', name: 'task_delete', methods: ['DELETE'])]
+    /**
+     * Function : Delete a task
+     * @param Task $task
+     * @param EntityManagerInterface $em
+     * @return RedirectResponse
+     */
+    #[Route('/tasks/{id}/delete', name: 'task_delete', methods: ['DELETE', 'POST'])]
     public function delete(Task $task, EntityManagerInterface $em)
     {
-        // administrateur peut supprimer tache anonyme
         $user = $this->security->getUser();
-        if($user->getId() !== $task->getAuthor()->getId()) {
+
+        // Error if user is not role_admin and user_id is not equals to task author id
+        if(!in_array('ROLE_ADMIN', $user->getRoles()) && $user->getId() !== $task->getAuthor()->getId()) {
             $this->addFlash(
                'error',
                'Vous ne pouvez pas supprimer cette tâche.'
@@ -109,6 +116,16 @@ class TaskController extends AbstractController
             return $this->redirectToRoute('task_list');
         }
 
+        // Admin can delete Anonymous tasks
+        if(in_array('ROLE_ADMIN', $user->getRoles()) && $task->getAuthor()->getUsername() == 'Anonymous') {
+            $em->remove($task);
+            $em->flush();
+            $this->addFlash('success', 'La tâche Anonyme a bien été supprimée.');
+
+            return $this->redirectToRoute('task_list');
+        }
+
+        // User can delete their task
         $em->remove($task);
         $em->flush();
 

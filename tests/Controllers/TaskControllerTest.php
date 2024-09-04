@@ -108,6 +108,7 @@ class TaskControllerTest extends WebTestCase
      */
     public function testAnonymousUserCreateTask(): void
     {
+        // User is not logged in ==> Anonymous
         // Try post the task form
         $crawler = $this->client->request('POST', 'tasks/create');
 
@@ -168,9 +169,6 @@ class TaskControllerTest extends WebTestCase
      */
     public function testEditTaskFormIsRendered(): void
     {
-        // Use the profiler to get the template
-        $this->client->enableProfiler();
-
         // Create a random task
         $task = $this->createTask();
 
@@ -178,12 +176,9 @@ class TaskControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', 'tasks/'.$task->getId().'/edit');
         $this->assertResponseIsSuccessful('Nous ne pouvons pas accéder à la page tasks/edit.');
 
-        $profile = $this->client->getProfile();
-        $collector = $profile->getCollector('twig');
 
         // Verify if it's the right template and template get form
-        $templates = array_keys($collector->getTemplates());
-        $this->assertContains('task/edit.html.twig', $templates);
+        $this->assertSelectorTextContains('button', 'Modifier');
         $this->assertSelectorExists('form');
     }
 
@@ -210,6 +205,33 @@ class TaskControllerTest extends WebTestCase
         
         $this->client->followRedirect();
         $this->assertSelectorTextContains('.alert-success', "La tâche a bien été modifiée.");
+    }
+
+    /**
+     * Test : Failed to modify author's task
+     * @return void
+     */
+    public function testUserTryModifyAuthorOfATask(): void
+    {
+        // Create a random task
+        $task = $this->createTask();
+        $default_author = $task->getAuthor()->getId();
+
+        $crawler = $this->client->request('POST', 'tasks/'.$task->getId().'/edit?author=8');
+
+         // Modify the current task
+         $form = $crawler->selectButton('Modifier')->form([
+            'task[title]' => $task->getTitle().' edit',
+            'task[content]' => 'this is a test content edit',
+        ]);
+
+        $this->client->submit($form);
+
+        $this->assertResponseRedirects('/tasks/list', 302, "La redirection après soumission du formulaire a échoué.");
+        
+        $this->assertEquals($default_author, $task->getAuthor()->getId(), "L'auteur n'a pas été modifié");
+
+        $this->client->followRedirect();
     }
 
     /**
@@ -275,6 +297,33 @@ class TaskControllerTest extends WebTestCase
         $this->client->followRedirect();
 
         $this->assertSelectorTextContains('.alert-danger', "Vous ne pouvez pas supprimer cette tâche.");
+    }
+
+    /**
+     * Test : Admin can delete Anonymous Task
+     * @return void
+     */
+    public function testAdminCanDeleteAnonymousTask(): void
+    {
+        $user = $this->createUser();
+        $user->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
+
+        $task = $this->createTask();
+        $anonymous_user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => 'Anonymous']);
+        $task->setAuthor($anonymous_user);
+
+        $this->entityManager->flush();
+
+        $this->client->loginUser($user);
+
+        $this->client->request('DELETE', 'tasks/'.$task->getId().'/delete');
+
+        $this->assertResponseRedirects('/tasks/list');
+
+        $this->client->followRedirect();
+
+        $this->assertSelectorTextContains('.alert-success', "La tâche Anonyme a bien été supprimée.");
+        $this->assertNull($this->entityManager->getRepository(Task::class)->findOneBy(['id' => $task->getId()]));
     }
 
     public function tearDown(): void

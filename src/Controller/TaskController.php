@@ -68,10 +68,14 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if($request->get('author')) {
-                $this->addFlash('error', 'Vous ne pouvez pas modifié l\'auteur d\'une tâche.');
+            if($form->getData()->getAuthor() !== $task->getAuthor()) {
+                $this->addFlash('error', 'Vous ne pouvez pas modifier l\'auteur d\'une tâche.');
                 return $this->redirectToRoute('task_list');
             }
+
+            $task->setTitle($form->getData()->getTitle());
+            $task->setContent($form->getData()->getContent());
+            
             $em->flush();
 
             $this->addFlash('success', 'La tâche a bien été modifiée.');

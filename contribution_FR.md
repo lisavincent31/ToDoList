@@ -1,4 +1,4 @@
-# Contribution au développement de l'application
+# Contribution au développement de l'application (FR)
 
 Chers développeurs, ce document a pour but de vous présenter les étapes clés pour contribuer à l'amélioration et au développement de l'application ToDo&Co.
 

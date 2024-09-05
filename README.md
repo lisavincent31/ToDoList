@@ -69,6 +69,12 @@ Voici les axes d'améliorations à apporter rapidement à l'application pour une
 - la possibilité de créer des groupes ou de rendre les tâches privées et publics ;
 - ne pas laisser la possibilité à tous les utilisateurs de choisir leurs rôles ;
 
+## Contribution
+
+Vous trouverez à la racine du dossier les fichiers de contributions (français et anglais).
+
+Ces fichiers se nomment : **contribution_FR.mk** et **contribution_EN.mk**
+
 # English version
 
 ## Introduction
@@ -139,3 +145,9 @@ Here are the areas where we need to make rapid improvements to the application t
 - the creation of a user and administrator dashboard;
 - the possibility of creating groups or making tasks private or public;
 - not allowing all users to choose their roles;
+
+## Contribution
+
+At the root of the folder you will find the contribution files (French and English).
+
+These files are called : **contribution_FR.mk** and **contribution_EN.mk**

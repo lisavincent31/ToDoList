@@ -58,7 +58,7 @@ Exemple : **C:/Windows/projects/ToDoList/public/test-coverage/index.html**
 
 Vous arriverez directement sur le rapport de couverture du code. Comme vous pouvez le constater, cette couverture est à hauteur de 85%.
 
-## RoadMap
+## Améliorations à apporter
 
 Voici les axes d'améliorations à apporter rapidement à l'application pour une meilleure expériences utilisateur : 
 

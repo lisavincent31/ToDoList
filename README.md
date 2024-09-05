@@ -68,3 +68,74 @@ Voici les axes d'améliorations à apporter rapidement à l'application pour une
 - la création d'un tableau de bord utilisateur et administrateur ;
 - la possibilité de créer des groupes ou de rendre les tâches privées et publics ;
 - ne pas laisser la possibilité à tous les utilisateurs de choisir leurs rôles ;
+
+# English version
+
+## Introduction
+
+The aim of this project is to improve an existing ToDoList application by adding the following functionalities :
+
+- Associate a task with the logged-in person or, if applicable, with an ‘Anonymous’ person;
+- A user must be able to modify a task without modifying its author;
+- A user must be able to delete a task associated with him/her;
+- When creating or modifying a user, it must be possible to choose an ‘Admin’ or ‘User’ role;
+- Only administrators can access the user management table;
+- Only administrators can delete a task created by an ‘Anonymous’ person;
+
+## Installation
+
+To install the project on your computer, you need to open your command prompt in the desired folder and enter this command :
+
+```bash
+git clone https://github.com/lisavincent31/ToDoList.git
+cd ToDoList
+composer install
+```
+
+You can then access the folder in your code editor.
+
+### Configuration
+
+Open the *.env* file at the root of the folder to configure your database. You can then create your database and load the fixtures by typing the following commands in your terminal :
+
+```bash
+php bin/console doctrine:database:create
+php bin/console doctrine:schema:update --force
+php bin/console doctrine:fixtures:load
+```
+
+### Launching the project
+
+To start the project, simply enter the command : 
+
+```bash
+symfony serve:start
+```
+
+Then open your browser at the following address : [127.0.0.1](http://127.0.0.1:8000/)
+
+## Tests
+
+### Code coverage
+
+You will find the file to access your code coverage in the following relative path : 
+
+**/public/test-coverage/index.html**
+
+Make sure you enter the full URL of the path to your file.
+
+Example : **C:/Windows/projects/ToDoList/public/test-coverage/index.html**
+
+This will take you directly to the code coverage report. As you can see, the coverage is 85%.
+
+## Improvements to be made
+
+Improvements to be made
+Here are the areas where we need to make rapid improvements to the application to enhance the user experience:
+
+- a more dynamic and better-structured interface;
+- the creation of a menu would be simpler than buttons on the page;
+- adding the creation and modification dates to tasks;
+- the creation of a user and administrator dashboard;
+- the possibility of creating groups or making tasks private or public;
+- not allowing all users to choose their roles;

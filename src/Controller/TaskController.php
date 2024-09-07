@@ -32,6 +32,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/create', name: 'task_create', methods:['GET', 'POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY', message: "Vous devez être connecté pour accéder à cette page.")]
     public function create(Request $request, EntityManagerInterface $em, UserRepository $userRepository)
     {
         $task = new Task();
@@ -59,6 +60,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('tasks/{id}/edit', name: 'task_edit', methods:['GET', 'POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY', message: "Vous devez être connecté pour accéder à cette page.")]
     public function edit(Task $task, Request $request, EntityManagerInterface $em)
     {
         $user = $this->security->getUser();
@@ -90,6 +92,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}/toggle', name: 'task_toggle', methods: ['GET'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY', message: "Vous devez être connecté pour modifier cette fonction.")]
     public function toggle(Task $task, EntityManagerInterface $em)
     {
         $task->toggle(!$task->isDone());
@@ -107,6 +110,7 @@ class TaskController extends AbstractController
      * @return RedirectResponse
      */
     #[Route('/tasks/{id}/delete', name: 'task_delete', methods: ['DELETE', 'POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY', message: "Vous devez être connecté pour accéder à cette page.")]
     public function delete(Task $task, EntityManagerInterface $em)
     {
         $user = $this->security->getUser();

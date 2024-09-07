@@ -33,6 +33,16 @@ php bin/console doctrine:database:create
 php bin/console doctrine:schema:update --force
 php bin/console doctrine:fixtures:load
 ```
+### Comptes pour le jeu de données
+
+Voici les adresses e-mail et mot de passes pour les utilisateurs créés dans le jeu de données :
+
+- Administrateur : 
+    - email => "admin@example.com" 
+    - mot de passe => "s3cr3t/<:Adm1n!" ;
+- Utilisateur : 
+    - email => "user@example.com"
+    - mot de passe => "s3cr3t/<:us3r!" ;
 
 ### Lancer le projet
 
